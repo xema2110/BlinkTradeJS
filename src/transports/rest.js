@@ -21,7 +21,7 @@
  */
 
 import url from 'url';
-import sjcl from 'sjcl';
+import createHmac from 'create-hmac';
 import fetchPonyfill from 'fetch-ponyfill';
 
 import Transport from './transport';
@@ -54,9 +54,10 @@ class RestTransport extends Transport {
 
   headers(method: string, body: Object): Object {
     const timeStamp = Date.now().toString();
-    const hexKey = sjcl.codec.utf8String.toBits(this.secret);
-    const hmac = new sjcl.misc.hmac(hexKey, sjcl.hash.sha256);
-    const Signature = sjcl.codec.hex.fromBits(hmac.encrypt(timeStamp));
+    const Signature = createHmac('sha256', this.secret)
+      .update(timeStamp)
+      .digest('hex');
+
     return {
       method,
       headers: {
