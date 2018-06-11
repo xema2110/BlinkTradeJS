@@ -24,10 +24,8 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable import/prefer-default-export */
 
-import macaddress from 'macaddress';
-
 export function getMac(callback: Function): void {
-  macaddress.all((err, all) => {
+  require('macaddress').all((err, all) => {
     const hashCode = (str) => {
       let hash = 0;
       if (str.length === 0) return hash;

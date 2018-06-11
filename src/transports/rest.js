@@ -20,13 +20,12 @@
  * @flow
  */
 
-import url from 'url';
 import createHmac from 'create-hmac';
 import fetchPonyfill from 'fetch-ponyfill';
 
 import Transport from './transport';
 
-const { fetch } = fetchPonyfill(Promise);
+const { fetch } = fetchPonyfill({ Promise });
 
 class RestTransport extends Transport {
   /**
@@ -71,7 +70,7 @@ class RestTransport extends Transport {
   }
 
   fetch(msg: Object, api: string, headers?: Object = {}): Promise<Object> {
-    return fetch(url.resolve(this.endpoint, api), headers)
+    return fetch(this.endpoint + api, headers)
       .then(response => response.json());
   }
 

@@ -21,7 +21,9 @@
  */
 
 import nodeify from 'nodeify';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+import EventEmitter from 'eventemitter2';
+import { getMac } from '../util/macaddress';
+import { getStun, closeStun } from '../util/stun';
 
 import Transport, { IS_NODE, IS_BROWSER } from './transport';
 
@@ -157,7 +159,7 @@ class WebSocketTransport extends Transport {
 
   getFingerPrint(customFingerprint?: string): void {
     if (IS_NODE) {
-      return require('../util/macaddress').getMac(macAddress => {
+      return getMac(macAddress => {
         this.fingerPrint = macAddress;
       });
     } else if (IS_BROWSER) {
@@ -174,7 +176,7 @@ class WebSocketTransport extends Transport {
 
   getStun(): void {
     if (IS_NODE) {
-      require('../util/stun').getStun(data => {
+      getStun(data => {
         this.stun = data;
       });
     }
@@ -182,7 +184,7 @@ class WebSocketTransport extends Transport {
 
   closeStun(): void {
     if (IS_NODE) {
-      require('../util/stun').closeStun();
+      closeStun();
     }
   }
 
